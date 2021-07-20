@@ -19,6 +19,11 @@ namespace calculator.ViewModels
         #region Commands
         
         private DelegateCommand _addCommand;
+        private DelegateCommand _backCommand;
+        private DelegateCommand _clearCommand;
+        private DelegateCommand _clearEntryCommand;
+        private DelegateCommand _equalsCommand;
+
         private DelegateCommand _oneCommand;
         private DelegateCommand _twoCommand;
         private DelegateCommand _threeCommand;
@@ -33,11 +38,13 @@ namespace calculator.ViewModels
 
         #endregion Commands
 
-        private string _currentDisplay = string.Empty;
-        private string _result = string.Empty;
+        private string _currentDisplay = "0";
+        private string _equalsSign = string.Empty;
+        private bool _justSelectedOperator;
         private string _operand1 = string.Empty;
         private string _operand2 = string.Empty;
-
+        private string _operator = string.Empty;
+        private string _result = string.Empty;
 
         #endregion Declarations
 
@@ -51,10 +58,71 @@ namespace calculator.ViewModels
             {
                 if (_addCommand == null)
                 {
-                    _addCommand = new DelegateCommand(() => onOperate(Operations.Add));
+                    _addCommand = new DelegateCommand(
+                        () => onOperate(Operations.Add));
                 }
 
                 return _addCommand;
+            }
+        }
+
+        public DelegateCommand BackCommand
+        {
+            get
+            {
+                if (_backCommand == null)
+                {
+                    _backCommand = new DelegateCommand(
+                        () => onBack(),
+                        () => !string.IsNullOrWhiteSpace(CurrentDisplay));
+                }
+
+                return _backCommand;
+            }
+        }
+
+        public DelegateCommand ClearCommand
+        {
+            get
+            {
+                if (_clearCommand == null)
+                {
+                    _clearCommand = new DelegateCommand(
+                        () =>
+                        {
+                            onClear(false);
+                        });
+                }
+
+                return _clearCommand;
+            }
+        }
+
+        public DelegateCommand ClearEntryCommand
+        {
+            get
+            {
+                if (_clearEntryCommand == null)
+                {
+                    _clearEntryCommand = new DelegateCommand(
+                        () => onClear(true));
+                }
+
+                return _clearEntryCommand;
+            }
+        }
+
+        public DelegateCommand EqualsCommand
+        {
+            get
+            {
+                if (_equalsCommand == null)
+                {
+                    _equalsCommand = new DelegateCommand(
+                        () => onEquals());
+                }
+
+                return _equalsCommand;
             }
         }
 
@@ -66,7 +134,16 @@ namespace calculator.ViewModels
                 {
                     _oneCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "1";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "1";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "1";
+                        }
+                        
                     });
                 }
 
@@ -82,7 +159,15 @@ namespace calculator.ViewModels
                 {
                     _twoCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "2";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "2";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "2";
+                        }
                     });
                 }
 
@@ -98,7 +183,15 @@ namespace calculator.ViewModels
                 {
                     _threeCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "3";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "3";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "3";
+                        }
                     });
                 }
 
@@ -114,7 +207,15 @@ namespace calculator.ViewModels
                 {
                     _fourCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "4";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "4";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "4";
+                        }
                     });
                 }
 
@@ -130,7 +231,15 @@ namespace calculator.ViewModels
                 {
                     _fiveCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "5";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "5";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "5";
+                        }
                     });
                 }
 
@@ -146,7 +255,15 @@ namespace calculator.ViewModels
                 {
                     _sixCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "6";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "6";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "6";
+                        }
                     });
                 }
 
@@ -162,7 +279,15 @@ namespace calculator.ViewModels
                 {
                     _sevenCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "7";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "7";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "7";
+                        }
                     });
                 }
 
@@ -178,7 +303,15 @@ namespace calculator.ViewModels
                 {
                     _eightCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "8";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "8";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "8";
+                        }
                     });
                 }
 
@@ -194,7 +327,15 @@ namespace calculator.ViewModels
                 {
                     _nineCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "9";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "9";
+                        }
+                        else
+                        {
+                            CurrentDisplay = "9";
+                        }
                     });
                 }
 
@@ -210,7 +351,11 @@ namespace calculator.ViewModels
                 {
                     _zeroCommand = new DelegateCommand(() =>
                     {
-                        CurrentDisplay += "0";
+                        CheckClearCurrentDisplay(false);
+                        if (CurrentDisplay != "0")
+                        {
+                            CurrentDisplay += "0";
+                        }
                     });
                 }
 
@@ -227,6 +372,7 @@ namespace calculator.ViewModels
                     _dotCommand = new DelegateCommand(
                     () =>
                     {
+                        CheckClearCurrentDisplay(true);
                         CurrentDisplay += ".";
                     },
                     () =>
@@ -253,6 +399,55 @@ namespace calculator.ViewModels
             }
         }
 
+        public string EqualsSign
+        {
+            get { return _equalsSign; }
+            set
+            {
+                _equalsSign = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool JustSelectedOperator
+        {
+            get { return _justSelectedOperator; }
+            set
+            {
+                _justSelectedOperator = value;
+            }
+        }
+
+        public string Operand1
+        {
+            get { return _operand1; }
+            set
+            {
+                _operand1 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Operand2
+        {
+            get { return _operand2; }
+            set
+            {
+                _operand2 = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Operator
+        {
+            get { return _operator; }
+            set
+            {
+                _operator = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Result
         {
             get { return _result; }
@@ -275,25 +470,100 @@ namespace calculator.ViewModels
 
         #region Public Methods
 
-
+        public void CheckClearCurrentDisplay(bool isDot)
+        {
+            if (JustSelectedOperator)
+            {
+                if (isDot)
+                {
+                    CurrentDisplay = "0";
+                }
+                else
+                {
+                    CurrentDisplay = string.Empty;
+                }
+                
+                JustSelectedOperator = false;
+            }
+        }
 
         #endregion Public Methods
 
         #region Private Methods
 
+        private void onBack()
+        {
+            if (CurrentDisplay.Length == 1)
+            {
+                CurrentDisplay = "0";
+            }
+            else
+            {
+                CurrentDisplay = CurrentDisplay.Remove(CurrentDisplay.Count() - 1);
+            }            
+        }
+
+        private void onClear(bool clearEntry)
+        {
+            CurrentDisplay = "0";
+            if (!clearEntry ||
+                !string.IsNullOrEmpty(EqualsSign))
+            { 
+                EqualsSign = string.Empty;
+                Operand1 = string.Empty;
+                Operand2 = string.Empty;
+                Operator = string.Empty;
+                JustSelectedOperator = false;
+            }
+        }
+
+        private void onEquals()
+        {           
+            switch (Operator)
+            {
+                case Operations.Add:
+                    try
+                    {
+                        Operand2 = CurrentDisplay;
+                        CurrentDisplay = (float.Parse(Operand1) + float.Parse(CurrentDisplay)).ToString();
+                        EqualsSign = "=";
+                    }
+                    catch (OverflowException)
+                    {
+                        CurrentDisplay = "Number is too large!";
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void onOperate(
             string operation)
         {
-            if (string.IsNullOrWhiteSpace(_operand1))
+            JustSelectedOperator = true;
+            if (string.IsNullOrWhiteSpace(Operand1) ||
+                !string.IsNullOrWhiteSpace(EqualsSign))
             {
-                _operand1 = CurrentDisplay;
+                Operand1 = CurrentDisplay;
+                Operand2 = string.Empty;
+                Operator = operation;
+                EqualsSign = string.Empty;
             }
             else
             {
                 switch (operation)
                 {
                     case Operations.Add:
-                        CurrentDisplay = (float.Parse(_operand1) + float.Parse(CurrentDisplay)).ToString();
+                        try
+                        {
+                            CurrentDisplay = (float.Parse(Operand1) + float.Parse(CurrentDisplay)).ToString();
+                            Operand1 = CurrentDisplay;
+                        }
+                        catch (OverflowException)
+                        {
+                            CurrentDisplay = "Number is too large!";
+                        }                        
                         break;
                     default:
                         break;

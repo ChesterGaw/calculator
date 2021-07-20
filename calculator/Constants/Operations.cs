@@ -8,12 +8,12 @@ namespace calculator.Constants
 {
     class Operations
     {
-        public const string Add = "A";
-        public const string Subtract = "S";
-        public const string Multiply = "M";
-        public const string Divide = "D";
-        public const string Negate = "N";
-        public const string SquareRoot = "Q";
-        public const string OneDivideByX = "E";
+        public const string Add = "+";
+        public const string Subtract = "-";
+        public const string Multiply = "*";
+        public const string Divide = "/";
+        public const string Negate = "+/-";
+        public const string SquareRoot = "√";
+        public const string OneDivideByX = "1/X";
     }
 }

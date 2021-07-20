@@ -98,6 +98,12 @@ namespace calculator
                         calculatorComponentViewModel.DotCommand.Execute();
                     }
                     break;
+                case Key.Back:
+                    if (calculatorComponentViewModel.BackCommand.CanExecute())
+                    {
+                        calculatorComponentViewModel.BackCommand.Execute();
+                    }
+                    break;
                 default:
                     break;
 
