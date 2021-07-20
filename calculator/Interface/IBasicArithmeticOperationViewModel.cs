@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace calculator.ViewModels.ArithmeticOperations
 {
-    public interface IArithmeticOperationViewModel
+    public interface IBasicArithmeticOperationViewModel
     {
         float PerformArithmeticOperation(
             float val1, 
