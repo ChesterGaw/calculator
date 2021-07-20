@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using calculator.ViewModels;
 
@@ -102,6 +103,28 @@ namespace calculator
                     if (calculatorComponentViewModel.BackCommand.CanExecute())
                     {
                         calculatorComponentViewModel.BackCommand.Execute();
+                    }
+                    break;
+                case Key.OemPlus:
+                    if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                    {
+                        if (calculatorComponentViewModel.AddCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.AddCommand.Execute();
+                        }
+                    }
+                    else
+                    {
+                        if (calculatorComponentViewModel.EqualsCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.EqualsCommand.Execute();
+                        }                        
+                    }
+                    break;
+                case Key.Add:
+                    if (calculatorComponentViewModel.AddCommand.CanExecute())
+                    {
+                        calculatorComponentViewModel.AddCommand.Execute();
                     }
                     break;
                 default:
