@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:calculator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="527" Width="345"
+        Title="MainWindow" Height="527" Width="745"
         KeyDown="_onKeyDownHandler">
     <DockPanel
         Margin="10,0,10,0"
@@ -13,7 +12,10 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem 
                 Header="_File">
-                <MenuItem Header="C_lear"/>
+                <MenuItem 
+                    Header="C_lear"
+                    InputGestureText="ALT + L"
+                    Command="{Binding ClearEntryCommand}"/>
                 <MenuItem Header="E_xit"/>
             </MenuItem>
             <MenuItem Header="_Edit">
@@ -26,7 +28,7 @@
             </MenuItem>
         </Menu>
         <StackPanel
-            Orientation="Horizontal">
+            DockPanel.Dock="Left">
             <StackPanel
                 Margin="0,5,0,5">
                 <TextBlock
@@ -87,27 +89,32 @@
                         Grid.Column="0"
                         Grid.Row="0"
                         Margin="3"
-                        Content="MC"/>
+                        Content="MC"
+                        Command="{Binding MemoryClearCommand}"/>
                     <Button
                         Grid.Column="1"
                         Grid.Row="0"
                         Margin="3"
-                        Content="MR"/>
+                        Content="MR"
+                        Command="{Binding MemoryRecallCommand}"/>
                     <Button
                         Grid.Column="2"
                         Grid.Row="0"
                         Margin="3"
-                        Content="MS"/>
+                        Content="MS"
+                        Command="{Binding MemorySaveCommand}"/>
                     <Button
                         Grid.Column="3"
                         Grid.Row="0"
                         Margin="3"
-                        Content="M+"/>
+                        Content="M+"
+                        Command="{Binding MemoryPlusCommand}"/>
                     <Button
                         Grid.Column="4"
                         Grid.Row="0"
                         Margin="3"
-                        Content="M-"/>
+                        Content="M-"
+                        Command="{Binding MemoryMinusCommand}"/>
                     <Button
                         Grid.Column="0"
                         Grid.Row="1"
@@ -249,10 +256,15 @@
                         Command="{Binding AddCommand}"/>
                 </Grid>
             </StackPanel>
-            <ScrollViewer>
-                <ListBox
-                    />
-            </ScrollViewer>            
+            <StackPanel>
+                <Label
+                    Content="Memory"/>
+                <ScrollViewer
+                    Height="200">
+                    <ListBox
+                        ItemsSource="{Binding Memory}"/>
+                </ScrollViewer>
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </Window>

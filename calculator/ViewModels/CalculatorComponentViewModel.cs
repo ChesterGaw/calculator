@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -52,6 +53,7 @@ namespace calculator.ViewModels
         private string _currentDisplay = "0";
         private string _equalsSign = string.Empty;
         private bool _justSelectedOperator;
+        private ObservableCollection<string> _memory;
         private string _operand1 = string.Empty;
         private string _operand2 = string.Empty;
         private string _operator = string.Empty;
@@ -148,6 +150,78 @@ namespace calculator.ViewModels
                 }
 
                 return _equalsCommand;
+            }
+        }
+        
+        public DelegateCommand MemoryClearCommand
+        {
+            get
+            {
+                if (_memoryClearCommand == null)
+                {
+                    _memoryClearCommand = new DelegateCommand(
+                        () => onMemoryCommand(MemoryActions.MemoryClear),
+                        () => Memory != null && Memory.Count > 0);
+                }
+
+                return _memoryClearCommand;
+            }
+        }
+        
+        public DelegateCommand MemoryMinusCommand
+        {
+            get
+            {
+                if (_memoryMinusCommand == null)
+                {
+                    _memoryMinusCommand = new DelegateCommand(
+                        () => onMemoryCommand(MemoryActions.MemoryMinus));
+                }
+
+                return _memoryMinusCommand;
+            }
+        }
+        
+        public DelegateCommand MemoryPlusCommand
+        {
+            get
+            {
+                if (_memoryPlusCommand == null)
+                {
+                    _memoryPlusCommand = new DelegateCommand(
+                        () => onMemoryCommand(MemoryActions.MemoryPlus));
+                }
+
+                return _memoryPlusCommand;
+            }
+        } 
+        
+        public DelegateCommand MemoryRecallCommand
+        {
+            get
+            {
+                if (_memoryRecallCommand == null)
+                {
+                    _memoryRecallCommand = new DelegateCommand(
+                        () => onMemoryCommand(MemoryActions.MemoryRecall),
+                        () => Memory != null && Memory.Count > 0);
+                }
+
+                return _memoryRecallCommand;
+            }
+        }
+        
+        public DelegateCommand MemorySaveCommand
+        {
+            get
+            {
+                if (_memorySaveCommand == null)
+                {
+                    _memorySaveCommand = new DelegateCommand(
+                        () => onMemoryCommand(MemoryActions.MemorySave));
+                }
+
+                return _memorySaveCommand;
             }
         }
 
@@ -513,6 +587,16 @@ namespace calculator.ViewModels
             }
         }
 
+        public ObservableCollection<string> Memory
+        {
+            get { return _memory; }
+            set
+            {
+                _memory = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Operand1
         {
             get { return _operand1; }
@@ -559,6 +643,7 @@ namespace calculator.ViewModels
 
         public CalculatorComponentViewModel()
         {
+            Memory = new ObservableCollection<string>();
         }
 
         #endregion Constructor
@@ -764,8 +849,50 @@ namespace calculator.ViewModels
             }
         }
 
+        private void onMemoryCommand(string memoryActions)
+        {
+            switch (memoryActions)
+            {
+                case MemoryActions.MemoryClear:
+                    Memory.Clear();
+                    MemoryClearCommand.RaiseCanExecuteChanged();
+                    MemoryRecallCommand.RaiseCanExecuteChanged();
+                    break;
+                case MemoryActions.MemoryMinus:
+                    if (Memory.Count > 0)
+                    {
+                        Memory.Add((float.Parse(Memory.Last()) - float.Parse(CurrentDisplay)).ToString());
+                    }
+                    else
+                    {
+                        Memory.Add("-" + CurrentDisplay);
+                    }
+                    MemoryClearCommand.RaiseCanExecuteChanged();
+                    MemoryRecallCommand.RaiseCanExecuteChanged();
+                    break;
+                case MemoryActions.MemoryPlus:
+                    if (Memory.Count > 0)
+                    {
+                        Memory.Add((float.Parse(Memory.Last()) + float.Parse(CurrentDisplay)).ToString());
+                    }
+                    else
+                    {
+                        Memory.Add(CurrentDisplay);
+                    }
+                    MemoryClearCommand.RaiseCanExecuteChanged();
+                    MemoryRecallCommand.RaiseCanExecuteChanged();
+                    break;
+                case MemoryActions.MemoryRecall:
+                    CurrentDisplay = float.Parse(Memory.Last()).ToString();
+                    break;
+                case MemoryActions.MemorySave:
+                    Memory.Add(CurrentDisplay);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         #endregion Private Methods
-
-
     }
 }

@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Constants\MemoryActions.cs" />
     <Compile Include="Constants\Operations.cs" />
     <Compile Include="ViewModels\ArithmeticOperations\AddViewModel.cs" />
     <Compile Include="Interface\IBasicArithmeticOperationViewModel.cs" />
