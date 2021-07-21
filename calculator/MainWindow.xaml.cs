@@ -72,6 +72,21 @@ namespace calculator
                     }
                     break;
                 case Key.D8:
+                    if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                    {
+                        if (calculatorComponentViewModel.MultiplyCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.MultiplyCommand.Execute();
+                        }
+                    }
+                    else
+                    {
+                        if (calculatorComponentViewModel.EightCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.EightCommand.Execute();
+                        }
+                    }
+                    break;
                 case Key.NumPad8:
                     if (calculatorComponentViewModel.EightCommand.CanExecute())
                     {
@@ -125,6 +140,26 @@ namespace calculator
                     if (calculatorComponentViewModel.AddCommand.CanExecute())
                     {
                         calculatorComponentViewModel.AddCommand.Execute();
+                    }
+                    break;
+                case Key.OemMinus:
+                case Key.Subtract:
+                    if (calculatorComponentViewModel.SubtractCommand.CanExecute())
+                    {
+                        calculatorComponentViewModel.SubtractCommand.Execute();
+                    }
+                    break;
+                case Key.Multiply:
+                    if (calculatorComponentViewModel.MultiplyCommand.CanExecute())
+                    {
+                        calculatorComponentViewModel.MultiplyCommand.Execute();
+                    }
+                    break;
+                case Key.Oem2:
+                case Key.Divide:
+                    if (calculatorComponentViewModel.DivideCommand.CanExecute())
+                    {
+                        calculatorComponentViewModel.DivideCommand.Execute();
                     }
                     break;
                 default:

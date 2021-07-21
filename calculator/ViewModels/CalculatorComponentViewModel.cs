@@ -22,7 +22,18 @@ namespace calculator.ViewModels
         private DelegateCommand _backCommand;
         private DelegateCommand _clearCommand;
         private DelegateCommand _clearEntryCommand;
+        private DelegateCommand _divideCommand;
         private DelegateCommand _equalsCommand;
+        private DelegateCommand _memoryClearCommand;
+        private DelegateCommand _memoryMinusCommand;
+        private DelegateCommand _memoryPlusCommand;
+        private DelegateCommand _memoryRecallCommand;
+        private DelegateCommand _memorySaveCommand;
+        private DelegateCommand _multiplyCommand;
+        private DelegateCommand _negateCommand;
+        private DelegateCommand _oneDivideByXCommand;
+        private DelegateCommand _subtractCommand;
+        private DelegateCommand _squareRootCommand;
 
         private DelegateCommand _oneCommand;
         private DelegateCommand _twoCommand;
@@ -112,6 +123,20 @@ namespace calculator.ViewModels
             }
         }
 
+        public DelegateCommand DivideCommand
+        {
+            get
+            {
+                if (_divideCommand == null)
+                {
+                    _divideCommand = new DelegateCommand(
+                        () => onOperate(Operations.Divide));
+                }
+
+                return _divideCommand;
+            }
+        }
+
         public DelegateCommand EqualsCommand
         {
             get
@@ -123,6 +148,76 @@ namespace calculator.ViewModels
                 }
 
                 return _equalsCommand;
+            }
+        }
+
+        public DelegateCommand MultiplyCommand
+        {
+            get
+            {
+                if (_multiplyCommand == null)
+                {
+                    _multiplyCommand = new DelegateCommand(
+                        () => onOperate(Operations.Multiply));
+                }
+
+                return _multiplyCommand;
+            }
+        }
+
+        public DelegateCommand NegateCommand
+        {
+            get
+            {
+                if (_negateCommand == null)
+                {
+                    _negateCommand = new DelegateCommand(
+                        () => onSimpleOperate(Operations.Negate));
+                }
+
+                return _negateCommand;
+            }
+        }
+
+        public DelegateCommand OneDivideByXCommand
+        {
+            get
+            {
+                if (_oneDivideByXCommand == null)
+                {
+                    _oneDivideByXCommand = new DelegateCommand(
+                        () => onSimpleOperate(Operations.OneDivideByX));
+                }
+
+                return _oneDivideByXCommand;
+            }
+        }
+
+        public DelegateCommand SubtractCommand
+        {
+            get
+            {
+                if (_subtractCommand == null)
+                {
+                    _subtractCommand = new DelegateCommand(
+                        () => onOperate(Operations.Subtract));
+                }
+
+                return _subtractCommand;
+            }
+        }
+
+        public DelegateCommand SquareRootCommand
+        {
+            get
+            {
+                if (_squareRootCommand == null)
+                {
+                    _squareRootCommand = new DelegateCommand(
+                        () => onSimpleOperate(Operations.SquareRoot));
+                }
+
+                return _squareRootCommand;
             }
         }
 
@@ -530,7 +625,43 @@ namespace calculator.ViewModels
                     }
                     catch (OverflowException)
                     {
-                        CurrentDisplay = "Number is too large!";
+                        CurrentDisplay = "Number is out of range!";
+                    }
+                    break;
+                case Operations.Subtract:
+                    try
+                    {
+                        Operand2 = CurrentDisplay;
+                        CurrentDisplay = (float.Parse(Operand1) - float.Parse(CurrentDisplay)).ToString();
+                        EqualsSign = "=";
+                    }
+                    catch (OverflowException)
+                    {
+                        CurrentDisplay = "Number is out of range!";
+                    }
+                    break;
+                case Operations.Multiply:
+                    try
+                    {
+                        Operand2 = CurrentDisplay;
+                        CurrentDisplay = (float.Parse(Operand1) * float.Parse(CurrentDisplay)).ToString();
+                        EqualsSign = "=";
+                    }
+                    catch (OverflowException)
+                    {
+                        CurrentDisplay = "Number is out of range!";
+                    }
+                    break;
+                case Operations.Divide:
+                    try
+                    {
+                        Operand2 = CurrentDisplay;
+                        CurrentDisplay = (float.Parse(Operand1) / float.Parse(CurrentDisplay)).ToString();
+                        EqualsSign = "=";
+                    }
+                    catch (OverflowException)
+                    {
+                        CurrentDisplay = "Number is out of range!";
                     }
                     break;
                 default:
@@ -542,37 +673,99 @@ namespace calculator.ViewModels
             string operation)
         {
             JustSelectedOperator = true;
+            
             if (string.IsNullOrWhiteSpace(Operand1) ||
                 !string.IsNullOrWhiteSpace(EqualsSign))
             {
                 Operand1 = CurrentDisplay;
                 Operand2 = string.Empty;
-                Operator = operation;
                 EqualsSign = string.Empty;
             }
             else
-            {
-                switch (operation)
+            {   
+                if (Operator == operation)
                 {
-                    case Operations.Add:
-                        try
-                        {
-                            CurrentDisplay = (float.Parse(Operand1) + float.Parse(CurrentDisplay)).ToString();
-                            Operand1 = CurrentDisplay;
-                        }
-                        catch (OverflowException)
-                        {
-                            CurrentDisplay = "Number is too large!";
-                        }                        
-                        break;
-                    default:
-                        break;
+                    switch (operation)
+                    {
+                        case Operations.Add:
+                            try
+                            {
+                                CurrentDisplay = (float.Parse(Operand1) + float.Parse(CurrentDisplay)).ToString();
+                                Operand1 = CurrentDisplay;
+                            }
+                            catch (OverflowException)
+                            {
+                                CurrentDisplay = "Number is out of range!";
+                            }                        
+                            break;
+                        case Operations.Subtract:
+                            try
+                            {
+                                CurrentDisplay = (float.Parse(Operand1) - float.Parse(CurrentDisplay)).ToString();
+                                Operand1 = CurrentDisplay;
+                            }
+                            catch (OverflowException)
+                            {
+                                CurrentDisplay = "Number is out of range!";
+                            }
+                            break;
+                        case Operations.Multiply:
+                            try
+                            {
+                                CurrentDisplay = (float.Parse(Operand1) * float.Parse(CurrentDisplay)).ToString();
+                                Operand1 = CurrentDisplay;
+                            }
+                            catch (OverflowException)
+                            {
+                                CurrentDisplay = "Number is out of range!";
+                            }
+                            break;
+                        case Operations.Divide:
+                            try
+                            {
+                                CurrentDisplay = (float.Parse(Operand1) / float.Parse(CurrentDisplay)).ToString();
+                                Operand1 = CurrentDisplay;
+                            }
+                            catch (OverflowException)
+                            {
+                                CurrentDisplay = "Number is out of range!";
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
+            }
+            Operator = operation;
+        }
+
+        private void onSimpleOperate(string operation)
+        {
+            switch (operation)
+            {
+                case Operations.Negate:
+                    if (CurrentDisplay.StartsWith("-"))
+                    {
+                        CurrentDisplay = CurrentDisplay.Remove(0, 1);
+                    }
+                    else
+                    {
+                        CurrentDisplay = CurrentDisplay.Insert(0, "-");
+                    }                    
+                    break;
+                case Operations.SquareRoot:
+                    CurrentDisplay = Math.Sqrt(float.Parse(CurrentDisplay)).ToString();
+                    break;
+                case Operations.OneDivideByX:
+                    CurrentDisplay = (1 / float.Parse(CurrentDisplay)).ToString();
+                    break;
+                default:
+                    break;
             }
         }
 
         #endregion Private Methods
 
-        
+
     }
 }
