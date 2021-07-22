@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Windows.Forms;
+
 using calculator.Constants;
-using calculator.ViewModels.ArithmeticOperations;
 using Prism.Commands;
 
 namespace calculator.ViewModels
@@ -48,10 +45,16 @@ namespace calculator.ViewModels
         private DelegateCommand _zeroCommand;
         private DelegateCommand _dotCommand;
 
+        private DelegateCommand _copyCommand;
+        private DelegateCommand _exportCommand;
+        private DelegateCommand _importCommand;
+        private DelegateCommand _pasteCommand;
+        
         #endregion Commands
 
         private string _currentDisplay = "0";
         private string _equalsSign = string.Empty;
+        private List<HistoryEntry> _history = new List<HistoryEntry>();
         private bool _justSelectedOperator;
         private ObservableCollection<string> _memory;
         private string _operand1 = string.Empty;
@@ -556,6 +559,69 @@ namespace calculator.ViewModels
             }
         }
 
+        public DelegateCommand CopyCommand
+        {
+            get
+            {
+                if (_copyCommand == null)
+                {
+                    _copyCommand = new DelegateCommand(() =>
+                    {
+                        Clipboard.SetText(CurrentDisplay);
+                    });
+                }
+
+                return _copyCommand;
+            }
+        }
+        
+        public DelegateCommand ExportCommand
+        {
+            get
+            {
+                if (_exportCommand == null)
+                {
+                    _exportCommand = new DelegateCommand(() => onExport());
+                }
+
+                return _exportCommand;
+            }
+        }
+        
+        public DelegateCommand ImportCommand
+        {
+            get
+            {
+                if (_importCommand == null)
+                {
+                    _importCommand = new DelegateCommand(() => onImport());
+                }
+
+                return _importCommand;
+            }
+        }
+
+        public DelegateCommand PasteCommand
+        {
+            get
+            {
+                if (_pasteCommand == null)
+                {
+                    _pasteCommand = new DelegateCommand(() =>
+                    {
+                        float pastedString = float.MinValue;
+                        if (float.TryParse(Clipboard.GetData(DataFormats.Text) as string, out pastedString))
+                        {
+                            CurrentDisplay = pastedString.ToString();
+                        }
+                        
+                    });
+                }
+
+                return _pasteCommand;
+            }
+        }
+
         #endregion Commands
 
         public string CurrentDisplay
@@ -671,6 +737,28 @@ namespace calculator.ViewModels
 
         #region Private Methods
 
+        private float getFloat(string numbers)
+        {
+            float floatNumber;
+            if (float.TryParse(numbers, out floatNumber))
+            {
+                return floatNumber;
+            }
+
+            return floatNumber;
+        }
+
+        private void logHistory(
+            string historyAction,
+            string value)
+        {
+            _history.Add(
+                new HistoryEntry(
+                    historyAction,
+                    (_history.Count + 1).ToString(),
+                    value));
+        }
+
         private void onBack()
         {
             if (CurrentDisplay.Length == 1)
@@ -686,6 +774,8 @@ namespace calculator.ViewModels
         private void onClear(bool clearEntry)
         {
             CurrentDisplay = "0";
+            logHistory(HistoryActions.Clear, CurrentDisplay);
+
             if (!clearEntry ||
                 !string.IsNullOrEmpty(EqualsSign))
             { 
@@ -705,52 +795,112 @@ namespace calculator.ViewModels
                     try
                     {
                         Operand2 = CurrentDisplay;
-                        CurrentDisplay = (float.Parse(Operand1) + float.Parse(CurrentDisplay)).ToString();
+                        CurrentDisplay = (getFloat(Operand1) + getFloat(CurrentDisplay)).ToString();
                         EqualsSign = "=";
+                        logHistory(HistoryActions.Equal, CurrentDisplay);
                     }
                     catch (OverflowException)
                     {
                         CurrentDisplay = "Number is out of range!";
+                        logHistory(HistoryActions.Error, CurrentDisplay);
                     }
                     break;
-                case Operations.Subtract:
-                    try
-                    {
-                        Operand2 = CurrentDisplay;
-                        CurrentDisplay = (float.Parse(Operand1) - float.Parse(CurrentDisplay)).ToString();
-                        EqualsSign = "=";
-                    }
-                    catch (OverflowException)
-                    {
-                        CurrentDisplay = "Number is out of range!";
-                    }
-                    break;
-                case Operations.Multiply:
-                    try
-                    {
-                        Operand2 = CurrentDisplay;
-                        CurrentDisplay = (float.Parse(Operand1) * float.Parse(CurrentDisplay)).ToString();
-                        EqualsSign = "=";
-                    }
-                    catch (OverflowException)
-                    {
-                        CurrentDisplay = "Number is out of range!";
-                    }
-                    break;
+
                 case Operations.Divide:
                     try
                     {
                         Operand2 = CurrentDisplay;
-                        CurrentDisplay = (float.Parse(Operand1) / float.Parse(CurrentDisplay)).ToString();
+                        CurrentDisplay = (getFloat(Operand1) / getFloat(CurrentDisplay)).ToString();
                         EqualsSign = "=";
+                        logHistory(HistoryActions.Equal, CurrentDisplay);
                     }
                     catch (OverflowException)
                     {
                         CurrentDisplay = "Number is out of range!";
+                        logHistory(HistoryActions.Error, CurrentDisplay);
+                    }
+                    break;
+
+                case Operations.Multiply:
+                    try
+                    {
+                        Operand2 = CurrentDisplay;
+                        CurrentDisplay = (getFloat(Operand1) * getFloat(CurrentDisplay)).ToString();
+                        EqualsSign = "=";
+                        logHistory(HistoryActions.Equal, CurrentDisplay);
+                    }
+                    catch (OverflowException)
+                    {
+                        CurrentDisplay = "Number is out of range!";
+                        logHistory(HistoryActions.Error, CurrentDisplay);
+                    }
+                    break;
+                
+                case Operations.Subtract:
+                    try
+                    {
+                        Operand2 = CurrentDisplay;
+                        CurrentDisplay = (getFloat(Operand1) - getFloat(CurrentDisplay)).ToString();
+                        EqualsSign = "=";
+                        logHistory(HistoryActions.Equal, CurrentDisplay);
+                    }
+                    catch (OverflowException)
+                    {
+                        CurrentDisplay = "Number is out of range!";
+                        logHistory(HistoryActions.Error, CurrentDisplay);
                     }
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void onExport()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text file (*.txt)|*.txt";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(saveFileDialog.FileName))
+                {
+                    File.Delete(saveFileDialog.FileName);
+                }
+
+                // Create a file to write to.
+                using (StreamWriter sw = File.CreateText(saveFileDialog.FileName))
+                {
+                    foreach (HistoryEntry historyEntry in _history)
+                    {
+                        sw.WriteLine(historyEntry.ID + "," + historyEntry.Action + "," + historyEntry.Value);
+                    }
+                }                
+            }
+        }
+
+        private void onImport()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text file (*.txt)|*.txt";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamReader sr = File.OpenText(openFileDialog.FileName))
+                {
+                    string s = string.Empty;
+                    _history.Clear();
+                    while ((s = sr.ReadLine()) != null)
+                    {
+                        string[] stringArray = s.Split(',');
+                        if (stringArray.Count() == 3)
+                        {
+                            _history.Add(
+                                new HistoryEntry(
+                                    stringArray[0],
+                                    stringArray[1],
+                                    stringArray[2]));
+                        }
+                        
+                    }
+                }
             }
         }
 
@@ -765,6 +915,27 @@ namespace calculator.ViewModels
                 Operand1 = CurrentDisplay;
                 Operand2 = string.Empty;
                 EqualsSign = string.Empty;
+                switch (operation)
+                {
+                    case Operations.Add:
+                        logHistory(HistoryActions.Add, CurrentDisplay);
+                        break;
+
+                    case Operations.Divide:
+                        logHistory(HistoryActions.Divide, CurrentDisplay);
+                        break;
+
+                    case Operations.Multiply:
+                        logHistory(HistoryActions.Multiply, CurrentDisplay);
+                        break;
+
+                    case Operations.Subtract:
+                        logHistory(HistoryActions.Subtract, CurrentDisplay);
+                        break;
+
+                    default:
+                        break;
+                }
             }
             else
             {   
@@ -775,45 +946,56 @@ namespace calculator.ViewModels
                         case Operations.Add:
                             try
                             {
-                                CurrentDisplay = (float.Parse(Operand1) + float.Parse(CurrentDisplay)).ToString();
+                                logHistory(HistoryActions.Add, CurrentDisplay);
+                                CurrentDisplay = (getFloat(Operand1) + getFloat(CurrentDisplay)).ToString();
                                 Operand1 = CurrentDisplay;
                             }
                             catch (OverflowException)
                             {
                                 CurrentDisplay = "Number is out of range!";
+                                logHistory(HistoryActions.Error, CurrentDisplay);
                             }                        
                             break;
-                        case Operations.Subtract:
-                            try
-                            {
-                                CurrentDisplay = (float.Parse(Operand1) - float.Parse(CurrentDisplay)).ToString();
-                                Operand1 = CurrentDisplay;
-                            }
-                            catch (OverflowException)
-                            {
-                                CurrentDisplay = "Number is out of range!";
-                            }
-                            break;
-                        case Operations.Multiply:
-                            try
-                            {
-                                CurrentDisplay = (float.Parse(Operand1) * float.Parse(CurrentDisplay)).ToString();
-                                Operand1 = CurrentDisplay;
-                            }
-                            catch (OverflowException)
-                            {
-                                CurrentDisplay = "Number is out of range!";
-                            }
-                            break;
+
                         case Operations.Divide:
                             try
                             {
-                                CurrentDisplay = (float.Parse(Operand1) / float.Parse(CurrentDisplay)).ToString();
+                                logHistory(HistoryActions.Divide, CurrentDisplay);
+                                CurrentDisplay = (getFloat(Operand1) / getFloat(CurrentDisplay)).ToString();
                                 Operand1 = CurrentDisplay;
                             }
                             catch (OverflowException)
                             {
                                 CurrentDisplay = "Number is out of range!";
+                                logHistory(HistoryActions.Error, CurrentDisplay);
+                            }
+                            break;
+
+                        case Operations.Multiply:
+                            try
+                            {
+                                logHistory(HistoryActions.Multiply, CurrentDisplay);
+                                CurrentDisplay = (getFloat(Operand1) * getFloat(CurrentDisplay)).ToString();
+                                Operand1 = CurrentDisplay;
+                            }
+                            catch (OverflowException)
+                            {
+                                CurrentDisplay = "Number is out of range!";
+                                logHistory(HistoryActions.Error, CurrentDisplay);
+                            }
+                            break;
+                        
+                        case Operations.Subtract:
+                            try
+                            {
+                                logHistory(HistoryActions.Subtract, CurrentDisplay);
+                                CurrentDisplay = (getFloat(Operand1) - getFloat(CurrentDisplay)).ToString();
+                                Operand1 = CurrentDisplay;
+                            }
+                            catch (OverflowException)
+                            {
+                                CurrentDisplay = "Number is out of range!";
+                                logHistory(HistoryActions.Error, CurrentDisplay);
                             }
                             break;
                         default:
@@ -836,13 +1018,16 @@ namespace calculator.ViewModels
                     else
                     {
                         CurrentDisplay = CurrentDisplay.Insert(0, "-");
-                    }                    
+                    }
+                    logHistory(HistoryActions.Negate, CurrentDisplay);
                     break;
                 case Operations.SquareRoot:
-                    CurrentDisplay = Math.Sqrt(float.Parse(CurrentDisplay)).ToString();
+                    CurrentDisplay = Math.Sqrt(getFloat(CurrentDisplay)).ToString();
+                    logHistory(HistoryActions.SquareRoot, CurrentDisplay);
                     break;
                 case Operations.OneDivideByX:
-                    CurrentDisplay = (1 / float.Parse(CurrentDisplay)).ToString();
+                    CurrentDisplay = (1 / getFloat(CurrentDisplay)).ToString();
+                    logHistory(HistoryActions.OneDivideByX, CurrentDisplay);
                     break;
                 default:
                     break;
@@ -858,10 +1043,11 @@ namespace calculator.ViewModels
                     MemoryClearCommand.RaiseCanExecuteChanged();
                     MemoryRecallCommand.RaiseCanExecuteChanged();
                     break;
+
                 case MemoryActions.MemoryMinus:
                     if (Memory.Count > 0)
                     {
-                        Memory.Add((float.Parse(Memory.Last()) - float.Parse(CurrentDisplay)).ToString());
+                        Memory.Add((getFloat(Memory.Last()) - getFloat(CurrentDisplay)).ToString());
                     }
                     else
                     {
@@ -870,10 +1056,11 @@ namespace calculator.ViewModels
                     MemoryClearCommand.RaiseCanExecuteChanged();
                     MemoryRecallCommand.RaiseCanExecuteChanged();
                     break;
+
                 case MemoryActions.MemoryPlus:
                     if (Memory.Count > 0)
                     {
-                        Memory.Add((float.Parse(Memory.Last()) + float.Parse(CurrentDisplay)).ToString());
+                        Memory.Add((getFloat(Memory.Last()) + getFloat(CurrentDisplay)).ToString());
                     }
                     else
                     {
@@ -882,12 +1069,17 @@ namespace calculator.ViewModels
                     MemoryClearCommand.RaiseCanExecuteChanged();
                     MemoryRecallCommand.RaiseCanExecuteChanged();
                     break;
+
                 case MemoryActions.MemoryRecall:
-                    CurrentDisplay = float.Parse(Memory.Last()).ToString();
+                    CurrentDisplay = getFloat(Memory.Last()).ToString();
                     break;
+
                 case MemoryActions.MemorySave:
                     Memory.Add(CurrentDisplay);
+                    MemoryClearCommand.RaiseCanExecuteChanged();
+                    MemoryRecallCommand.RaiseCanExecuteChanged();
                     break;
+
                 default:
                     break;
             }

@@ -4,11 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="527" Width="745"
+        Title="MainWindow" Height="527" Width="645"
         KeyDown="_onKeyDownHandler">
     <DockPanel
-        Margin="10,0,10,0"
-        Width="300">
+        Margin="10,0,10,0">
         <Menu DockPanel.Dock="Top">
             <MenuItem 
                 Header="_File">
@@ -16,18 +15,33 @@
                     Header="C_lear"
                     InputGestureText="ALT + L"
                     Command="{Binding ClearEntryCommand}"/>
-                <MenuItem Header="E_xit"/>
+                <MenuItem 
+                    Header="E_xit"
+                    InputGestureText="ALT + F4"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="_Copy"/>
-                <MenuItem Header="_Paste"/>
+                <MenuItem 
+                    Header="_Copy"
+                    InputGestureText="CTRL + C"
+                    Command="{Binding CopyCommand}"/>
+                <MenuItem 
+                    Header="_Paste"
+                    InputGestureText="CTRL + V"
+                    Command="{Binding PasteCommand}"/>
             </MenuItem>
             <MenuItem Header="_History">
-                <MenuItem Header="Ex_port to Text"/>
-                <MenuItem Header="_Import from Text"/>
+                <MenuItem 
+                    Header="Ex_port to Text"
+                    InputGestureText="ALT + P"
+                    Command="{Binding ExportCommand}"/>
+                <MenuItem 
+                    Header="_Import from Text"
+                    InputGestureText="ALT + I"
+                    Command="{Binding ImportCommand}"/>
             </MenuItem>
         </Menu>
         <StackPanel
+            Orientation="Horizontal"
             DockPanel.Dock="Left">
             <StackPanel
                 Margin="0,5,0,5">
@@ -256,11 +270,13 @@
                         Command="{Binding AddCommand}"/>
                 </Grid>
             </StackPanel>
-            <StackPanel>
+            <StackPanel
+                Margin="10,0,0,0"
+                Width="300">
                 <Label
                     Content="Memory"/>
                 <ScrollViewer
-                    Height="200">
+                    Height="435">
                     <ListBox
                         ItemsSource="{Binding Memory}"/>
                 </ScrollViewer>

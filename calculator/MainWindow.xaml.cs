@@ -22,6 +22,8 @@ namespace calculator
 
             switch (e.Key)
             {
+                #region Numbers
+
                 case Key.D1:
                 case Key.NumPad1:
                     if (calculatorComponentViewModel.OneCommand.CanExecute())
@@ -114,28 +116,11 @@ namespace calculator
                         calculatorComponentViewModel.DotCommand.Execute();
                     }
                     break;
-                case Key.Back:
-                    if (calculatorComponentViewModel.BackCommand.CanExecute())
-                    {
-                        calculatorComponentViewModel.BackCommand.Execute();
-                    }
-                    break;
-                case Key.OemPlus:
-                    if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
-                    {
-                        if (calculatorComponentViewModel.AddCommand.CanExecute())
-                        {
-                            calculatorComponentViewModel.AddCommand.Execute();
-                        }
-                    }
-                    else
-                    {
-                        if (calculatorComponentViewModel.EqualsCommand.CanExecute())
-                        {
-                            calculatorComponentViewModel.EqualsCommand.Execute();
-                        }                        
-                    }
-                    break;
+
+                #endregion Numbers
+
+                #region Operations
+
                 case Key.Add:
                     if (calculatorComponentViewModel.AddCommand.CanExecute())
                     {
@@ -162,6 +147,53 @@ namespace calculator
                         calculatorComponentViewModel.DivideCommand.Execute();
                     }
                     break;
+                case Key.Back:
+                    if (calculatorComponentViewModel.BackCommand.CanExecute())
+                    {
+                        calculatorComponentViewModel.BackCommand.Execute();
+                    }
+                    break;
+                case Key.OemPlus:
+                    if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                    {
+                        if (calculatorComponentViewModel.AddCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.AddCommand.Execute();
+                        }
+                    }
+                    else
+                    {
+                        if (calculatorComponentViewModel.EqualsCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.EqualsCommand.Execute();
+                        }
+                    }
+                    break;
+
+                #endregion Operations
+
+                #region Menu Bar 
+
+                case Key.C:
+                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+                    {
+                        if (calculatorComponentViewModel.CopyCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.CopyCommand.Execute();
+                        }
+                    }
+                    break;
+                case Key.V:
+                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+                    {
+                        if (calculatorComponentViewModel.PasteCommand.CanExecute())
+                        {
+                            calculatorComponentViewModel.PasteCommand.Execute();
+                        }
+                    }
+                    break;
+
+                #endregion Menu Bar
                 default:
                     break;
 

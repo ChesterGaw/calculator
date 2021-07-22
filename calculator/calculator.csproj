@@ -59,11 +59,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Constants\HistoryActions.cs" />
     <Compile Include="Constants\MemoryActions.cs" />
     <Compile Include="Constants\Operations.cs" />
-    <Compile Include="ViewModels\ArithmeticOperations\AddViewModel.cs" />
-    <Compile Include="Interface\IBasicArithmeticOperationViewModel.cs" />
     <Compile Include="ViewModels\CalculatorComponentViewModel.cs" />
+    <Compile Include="ViewModels\HistoryEntry.cs" />
     <Compile Include="ViewModels\PropertyChangedBase.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
