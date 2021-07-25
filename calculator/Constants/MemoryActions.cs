@@ -1,5 +1,8 @@
 ﻿namespace calculator.Constants
 {
+    /// <summary>
+    /// List of constants for memory actions
+    /// </summary>
     public class MemoryActions
     {
         public const string MemoryClear = "MemoryClear";

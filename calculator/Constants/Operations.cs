@@ -1,5 +1,8 @@
 ﻿namespace calculator.Constants
 {
+    /// <summary>
+    /// List of constants for basic operations 
+    /// </summary>
     public class Operations
     {
         public const string Add = "+";

@@ -4,13 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="527" Width="645"
-        KeyDown="_onKeyDownHandler">
-    <DockPanel
-        Margin="10,0,10,0">
-        <Menu DockPanel.Dock="Top">
+        Title="Calculator" 
+        Height="457" 
+        Width="445"
+        KeyDown="_onKeyDownHandler"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFD4E8F3" >
+    <DockPanel>
+        <Menu 
+            DockPanel.Dock="Top"
+            Background="Transparent">
             <MenuItem 
-                Header="_File">
+                Header="_File"
+                Style="{DynamicResource MenuItemStyle}">
                 <MenuItem 
                     Header="C_lear"
                     InputGestureText="ALT + L"
@@ -19,7 +26,9 @@
                     Header="E_xit"
                     InputGestureText="ALT + F4"/>
             </MenuItem>
-            <MenuItem Header="_Edit">
+            <MenuItem 
+                Header="_Edit"
+                Style="{DynamicResource MenuItemStyle}">
                 <MenuItem 
                     Header="_Copy"
                     InputGestureText="CTRL + C"
@@ -29,7 +38,9 @@
                     InputGestureText="CTRL + V"
                     Command="{Binding PasteCommand}"/>
             </MenuItem>
-            <MenuItem Header="_History">
+            <MenuItem 
+                Header="_History"
+                Style="{DynamicResource MenuItemStyle}">
                 <MenuItem 
                     Header="Ex_port to Text"
                     InputGestureText="ALT + P"
@@ -41,51 +52,63 @@
             </MenuItem>
         </Menu>
         <StackPanel
+            Margin="10,0,10,0"
             Orientation="Horizontal"
             DockPanel.Dock="Left">
             <StackPanel
                 Margin="0,5,0,5">
-                <TextBlock
-                    Height="20"
-                    VerticalAlignment="Center"
-                    TextAlignment="Right"
-                    Text="{Binding Operand1}"/>
-                <TextBlock
-                    Height="20"
-                    VerticalAlignment="Center"
-                    TextAlignment="Right"
-                    Text="{Binding Operator}"/>
-                <TextBlock
-                    Height="20"
-                    VerticalAlignment="Center"
-                    TextAlignment="Right"
-                    Text="{Binding Operand2}"/>
-                <TextBlock
-                    Height="20"
-                    VerticalAlignment="Center"
-                    TextAlignment="Right"
-                    Text="{Binding EqualsSign}"/>
-                <TextBlock
-                    Height="20"
-                    Background="AliceBlue"
-                    Margin="0,0,0,0"
-                    VerticalAlignment="Center"
-                    TextAlignment="Right"
-                    Text="{Binding CurrentDisplay}"/>
+                <StackPanel
+                    Width="300"
+                    Margin="0,0,0,3"
+                    Background="LightSkyBlue">
+                    <TextBlock
+                        Height="20"
+                        VerticalAlignment="Center"
+                        TextAlignment="Right"
+                        Text="{Binding Operand1}"
+                        Style="{DynamicResource DisplayTextStyle}"
+                        TextTrimming="WordEllipsis"/>
+                    <TextBlock
+                        Height="20"
+                        VerticalAlignment="Center"
+                        TextAlignment="Right"
+                        Text="{Binding Operator}"
+                        Style="{DynamicResource DisplayTextStyle}"/>
+                    <TextBlock
+                        Height="20"
+                        VerticalAlignment="Center"
+                        TextAlignment="Right"
+                        Text="{Binding Operand2}"
+                        Style="{DynamicResource DisplayTextStyle}"
+                        TextTrimming="WordEllipsis"/>
+                    <TextBlock
+                        Height="20"
+                        VerticalAlignment="Center"
+                        TextAlignment="Right"
+                        Text="{Binding EqualsSign}"
+                        Style="{DynamicResource DisplayTextStyle}"/>
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        VerticalAlignment="Center"
+                        TextAlignment="Right"
+                        Text="{Binding CurrentDisplay}"
+                        Style="{DynamicResource ResultTextStyle}"
+                        TextTrimming="WordEllipsis"/>
+                </StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition
-                            Height="60"/>
+                            Height="45"/>
                         <RowDefinition
-                            Height="60"/>
+                            Height="45"/>
                         <RowDefinition
-                            Height="60"/>
+                            Height="45"/>
                         <RowDefinition
-                            Height="60"/>
+                            Height="45"/>
                         <RowDefinition
-                            Height="60"/>
+                            Height="45"/>
                         <RowDefinition
-                            Height="60"/>
+                            Height="45"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
@@ -102,181 +125,183 @@
                     <Button
                         Grid.Column="0"
                         Grid.Row="0"
-                        Margin="3"
                         Content="MC"
-                        Command="{Binding MemoryClearCommand}"/>
+                        Command="{Binding MemoryClearCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="1"
                         Grid.Row="0"
-                        Margin="3"
                         Content="MR"
-                        Command="{Binding MemoryRecallCommand}"/>
+                        Command="{Binding MemoryRecallCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="2"
                         Grid.Row="0"
-                        Margin="3"
                         Content="MS"
-                        Command="{Binding MemorySaveCommand}"/>
+                        Command="{Binding MemorySaveCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="3"
                         Grid.Row="0"
-                        Margin="3"
                         Content="M+"
-                        Command="{Binding MemoryPlusCommand}"/>
+                        Command="{Binding MemoryPlusCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="4"
                         Grid.Row="0"
-                        Margin="3"
                         Content="M-"
-                        Command="{Binding MemoryMinusCommand}"/>
+                        Command="{Binding MemoryMinusCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="0"
                         Grid.Row="1"
-                        Margin="3"
                         Content="Back"
-                        Command="{Binding BackCommand}"/>
+                        Command="{Binding BackCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="1"
                         Grid.Row="1"
-                        Margin="3"
                         Content="CE"
-                        Command="{Binding ClearEntryCommand}"/>
+                        Command="{Binding ClearEntryCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="2"
                         Grid.Row="1"
-                        Margin="3"
                         Content="C"
-                        Command="{Binding ClearCommand}"/>
+                        Command="{Binding ClearCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="3"
                         Grid.Row="1"
-                        Margin="3"
                         Content="±"
-                        Command="{Binding NegateCommand}"/>
+                        Command="{Binding NegateCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="4"
                         Grid.Row="1"
-                        Margin="3"
                         Content="√"
-                        Command="{Binding SquareRootCommand}"/>
+                        Command="{Binding SquareRootCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="0"
                         Grid.Row="2"
-                        Margin="3"
                         Content="7"
-                        Command="{Binding SevenCommand}"/>
+                        Command="{Binding SevenCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="1"
                         Grid.Row="2"
-                        Margin="3"
                         Content="8"
-                        Command="{Binding EightCommand}"/>
+                        Command="{Binding EightCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="2"
                         Grid.Row="2"
-                        Margin="3"
                         Content="9"
-                        Command="{Binding NineCommand}"/>
+                        Command="{Binding NineCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="3"
                         Grid.Row="2"
-                        Margin="3"
                         Content="/"
-                        Command="{Binding DivideCommand}"/>
+                        Command="{Binding DivideCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="4"
                         Grid.Row="2"
-                        Margin="3"
-                        Content="%"/>
+                        Content="%"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="0"
                         Grid.Row="3"
-                        Margin="3"
                         Content="4"
-                        Command="{Binding FourCommand}"/>
+                        Command="{Binding FourCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="1"
                         Grid.Row="3"
-                        Margin="3"
                         Content="5"
-                        Command="{Binding FiveCommand}"/>
+                        Command="{Binding FiveCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="2"
                         Grid.Row="3"
-                        Margin="3"
                         Content="6"
-                        Command="{Binding SixCommand}"/>
+                        Command="{Binding SixCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="3"
                         Grid.Row="3"
-                        Margin="3"
-                        Content="*"
-                        Command="{Binding MultiplyCommand}"/>
+                        Content="X"
+                        Command="{Binding MultiplyCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="4"
                         Grid.Row="3"
-                        Margin="3"
                         Content="1/x"
-                        Command="{Binding OneDivideByXCommand}"/>
+                        Command="{Binding OneDivideByXCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="0"
                         Grid.Row="4"
-                        Margin="3"
                         Content="1"
-                        Command="{Binding OneCommand}"/>
+                        Command="{Binding OneCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="1"
                         Grid.Row="4"
-                        Margin="3"
                         Content="2"
-                        Command="{Binding TwoCommand}"/>
+                        Command="{Binding TwoCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="2"
                         Grid.Row="4"
-                        Margin="3"
                         Content="3"
-                        Command="{Binding ThreeCommand}"/>
+                        Command="{Binding ThreeCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="3"
                         Grid.Row="4"
-                        Margin="3"
                         Content="-"
-                        Command="{Binding SubtractCommand}"/>
+                        Command="{Binding SubtractCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="4"
                         Grid.Row="4"
                         Grid.RowSpan="2"
-                        Margin="3"
                         Content="="
-                        Command="{Binding EqualsCommand}"/>
+                        Command="{Binding EqualsCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                     <Button
                         Grid.Column="0"
                         Grid.Row="5"
                         Grid.ColumnSpan="2"
-                        Margin="3"
                         Content="0"
-                        Command="{Binding ZeroCommand}"/>
+                        Command="{Binding ZeroCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="2"
                         Grid.Row="5"
-                        Margin="3"
                         Content="."
-                        Command="{Binding DotCommand}"/>
+                        Command="{Binding DotCommand}"
+                        Style="{DynamicResource CalculatorNumberButtonStyle}"/>
                     <Button
                         Grid.Column="3"
                         Grid.Row="5"
-                        Margin="3"
                         Content="+"
-                        Command="{Binding AddCommand}"/>
+                        Command="{Binding AddCommand}"
+                        Style="{StaticResource OperandButtonStyle}"/>
                 </Grid>
             </StackPanel>
             <StackPanel
                 Margin="10,0,0,0"
-                Width="300">
+                Width="100">
                 <Label
-                    Content="Memory"/>
+                    Content="Memory"
+                    FontFamily="Tahoma"
+                    FontSize="15"/>
                 <ScrollViewer
-                    Height="435">
+                    Height="360">
                     <ListBox
                         ItemsSource="{Binding Memory}"/>
                 </ScrollViewer>

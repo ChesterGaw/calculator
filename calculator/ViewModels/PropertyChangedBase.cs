@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace calculator.ViewModels
 {
+    /// <summary>
+    /// Helper class to update XAML display
+    /// </summary>
     public class PropertyChangedBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

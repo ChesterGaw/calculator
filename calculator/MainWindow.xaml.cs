@@ -16,6 +16,11 @@ namespace calculator
             this.DataContext = new CalculatorComponentViewModel();
         }
 
+        /// <summary>
+        /// Detects keypresses from main window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void _onKeyDownHandler(object sender, System.Windows.Input.KeyEventArgs e)
         {
             CalculatorComponentViewModel calculatorComponentViewModel = (CalculatorComponentViewModel)DataContext;
@@ -194,6 +199,7 @@ namespace calculator
                     break;
 
                 #endregion Menu Bar
+
                 default:
                     break;
 

@@ -1,5 +1,8 @@
 ﻿namespace calculator.Constants
 {
+    /// <summary>
+    /// List of constants being used in logging history
+    /// </summary>
     public class HistoryActions
     {
         public const string Add = "Add";

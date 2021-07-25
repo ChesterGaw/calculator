@@ -14,19 +14,21 @@ namespace calculator.ViewModels
     {
         #region Declarations
 
-        #region Commands
+        #region Commands declarations
         
-        private DelegateCommand _addCommand;
         private DelegateCommand _backCommand;
         private DelegateCommand _clearCommand;
         private DelegateCommand _clearEntryCommand;
-        private DelegateCommand _divideCommand;
-        private DelegateCommand _equalsCommand;
+        
         private DelegateCommand _memoryClearCommand;
         private DelegateCommand _memoryMinusCommand;
         private DelegateCommand _memoryPlusCommand;
         private DelegateCommand _memoryRecallCommand;
         private DelegateCommand _memorySaveCommand;
+
+        private DelegateCommand _addCommand;
+        private DelegateCommand _divideCommand;
+        private DelegateCommand _equalsCommand;
         private DelegateCommand _multiplyCommand;
         private DelegateCommand _negateCommand;
         private DelegateCommand _oneDivideByXCommand;
@@ -49,8 +51,8 @@ namespace calculator.ViewModels
         private DelegateCommand _exportCommand;
         private DelegateCommand _importCommand;
         private DelegateCommand _pasteCommand;
-        
-        #endregion Commands
+
+        #endregion Commands declarations
 
         private string _currentDisplay = "0";
         private string _equalsSign = string.Empty;
@@ -60,7 +62,6 @@ namespace calculator.ViewModels
         private string _operand1 = string.Empty;
         private string _operand2 = string.Empty;
         private string _operator = string.Empty;
-        private string _result = string.Empty;
 
         #endregion Declarations
 
@@ -68,20 +69,9 @@ namespace calculator.ViewModels
 
         #region Commands
 
-        public DelegateCommand AddCommand
-        {
-            get
-            {
-                if (_addCommand == null)
-                {
-                    _addCommand = new DelegateCommand(
-                        () => onOperate(Operations.Add));
-                }
-
-                return _addCommand;
-            }
-        }
-
+        /// <summary>
+        /// Backspace command
+        /// </summary>
         public DelegateCommand BackCommand
         {
             get
@@ -97,6 +87,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Clear command
+        /// </summary>
         public DelegateCommand ClearCommand
         {
             get
@@ -114,6 +107,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Clear entry command
+        /// </summary>
         public DelegateCommand ClearEntryCommand
         {
             get
@@ -128,34 +124,11 @@ namespace calculator.ViewModels
             }
         }
 
-        public DelegateCommand DivideCommand
-        {
-            get
-            {
-                if (_divideCommand == null)
-                {
-                    _divideCommand = new DelegateCommand(
-                        () => onOperate(Operations.Divide));
-                }
+        #region Memory Commands
 
-                return _divideCommand;
-            }
-        }
-
-        public DelegateCommand EqualsCommand
-        {
-            get
-            {
-                if (_equalsCommand == null)
-                {
-                    _equalsCommand = new DelegateCommand(
-                        () => onEquals());
-                }
-
-                return _equalsCommand;
-            }
-        }
-        
+        /// <summary>
+        /// Memory clear command
+        /// </summary>
         public DelegateCommand MemoryClearCommand
         {
             get
@@ -171,6 +144,9 @@ namespace calculator.ViewModels
             }
         }
         
+        /// <summary>
+        /// Memory minus command
+        /// </summary>
         public DelegateCommand MemoryMinusCommand
         {
             get
@@ -185,6 +161,9 @@ namespace calculator.ViewModels
             }
         }
         
+        /// <summary>
+        /// Memory plus command
+        /// </summary>
         public DelegateCommand MemoryPlusCommand
         {
             get
@@ -199,6 +178,9 @@ namespace calculator.ViewModels
             }
         } 
         
+        /// <summary>
+        /// Memory recall command
+        /// </summary>
         public DelegateCommand MemoryRecallCommand
         {
             get
@@ -214,6 +196,9 @@ namespace calculator.ViewModels
             }
         }
         
+        /// <summary>
+        /// Memory save command
+        /// </summary>
         public DelegateCommand MemorySaveCommand
         {
             get
@@ -228,6 +213,64 @@ namespace calculator.ViewModels
             }
         }
 
+        #endregion Memory Commands
+
+        #region Basic Operation Commands
+
+        /// <summary>
+        /// Add command
+        /// </summary>
+        public DelegateCommand AddCommand
+        {
+            get
+            {
+                if (_addCommand == null)
+                {
+                    _addCommand = new DelegateCommand(
+                        () => onOperate(Operations.Add));
+                }
+
+                return _addCommand;
+            }
+        }
+
+        /// <summary>
+        /// Divide command
+        /// </summary>
+        public DelegateCommand DivideCommand
+        {
+            get
+            {
+                if (_divideCommand == null)
+                {
+                    _divideCommand = new DelegateCommand(
+                        () => onOperate(Operations.Divide));
+                }
+
+                return _divideCommand;
+            }
+        }
+
+        /// <summary>
+        /// Equals Command
+        /// </summary>
+        public DelegateCommand EqualsCommand
+        {
+            get
+            {
+                if (_equalsCommand == null)
+                {
+                    _equalsCommand = new DelegateCommand(
+                        () => onEquals());
+                }
+
+                return _equalsCommand;
+            }
+        }
+
+        /// <summary>
+        /// Multiply command
+        /// </summary>
         public DelegateCommand MultiplyCommand
         {
             get
@@ -241,7 +284,10 @@ namespace calculator.ViewModels
                 return _multiplyCommand;
             }
         }
-
+        
+        /// <summary>
+        /// Negate command
+        /// </summary>
         public DelegateCommand NegateCommand
         {
             get
@@ -256,6 +302,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// One divide by x command
+        /// </summary>
         public DelegateCommand OneDivideByXCommand
         {
             get
@@ -270,6 +319,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Subtract command
+        /// </summary>
         public DelegateCommand SubtractCommand
         {
             get
@@ -284,6 +336,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Square root command
+        /// </summary>
         public DelegateCommand SquareRootCommand
         {
             get
@@ -298,6 +353,13 @@ namespace calculator.ViewModels
             }
         }
 
+        #endregion Basic Operation Commands
+
+        #region Number Commands
+
+        /// <summary>
+        /// One command
+        /// </summary>
         public DelegateCommand OneCommand
         {
             get
@@ -323,6 +385,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Two command
+        /// </summary>
         public DelegateCommand TwoCommand
         {
             get
@@ -347,6 +412,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Three command
+        /// </summary>
         public DelegateCommand ThreeCommand
         {
             get
@@ -371,6 +439,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Four command
+        /// </summary>
         public DelegateCommand FourCommand
         {
             get
@@ -395,6 +466,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Five command
+        /// </summary>
         public DelegateCommand FiveCommand
         {
             get
@@ -419,6 +493,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Six command
+        /// </summary>
         public DelegateCommand SixCommand
         {
             get
@@ -443,6 +520,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Seven command
+        /// </summary>
         public DelegateCommand SevenCommand
         {
             get
@@ -467,6 +547,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Eight command
+        /// </summary>
         public DelegateCommand EightCommand
         {
             get
@@ -491,6 +574,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Nine command
+        /// </summary>
         public DelegateCommand NineCommand
         {
             get
@@ -515,6 +601,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Zero command
+        /// </summary>
         public DelegateCommand ZeroCommand
         {
             get
@@ -535,6 +624,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Dot command
+        /// </summary>
         public DelegateCommand DotCommand
         {
             get
@@ -559,6 +651,13 @@ namespace calculator.ViewModels
             }
         }
 
+        #endregion Number Commands
+
+        #region Menu Bar Commands
+
+        /// <summary>
+        /// Copy command
+        /// </summary>
         public DelegateCommand CopyCommand
         {
             get
@@ -574,7 +673,10 @@ namespace calculator.ViewModels
                 return _copyCommand;
             }
         }
-        
+
+        /// <summary>
+        /// Export command
+        /// </summary>
         public DelegateCommand ExportCommand
         {
             get
@@ -587,7 +689,10 @@ namespace calculator.ViewModels
                 return _exportCommand;
             }
         }
-        
+
+        /// <summary>
+        /// Import command
+        /// </summary>
         public DelegateCommand ImportCommand
         {
             get
@@ -601,6 +706,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Paste command
+        /// </summary>
         public DelegateCommand PasteCommand
         {
             get
@@ -622,8 +730,13 @@ namespace calculator.ViewModels
             }
         }
 
+        #endregion Menu Bar Commands
+
         #endregion Commands
 
+        /// <summary>
+        /// Current display on the calculator
+        /// </summary>
         public string CurrentDisplay
         {
             get { return _currentDisplay; }
@@ -634,6 +747,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Equal sign on the calculator
+        /// </summary>
         public string EqualsSign
         {
             get { return _equalsSign; }
@@ -644,6 +760,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Bool that contains whether user recently selected an operator
+        /// </summary>
         public bool JustSelectedOperator
         {
             get { return _justSelectedOperator; }
@@ -653,6 +772,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Collection of memory queue
+        /// </summary>
         public ObservableCollection<string> Memory
         {
             get { return _memory; }
@@ -663,6 +785,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// First operand
+        /// </summary>
         public string Operand1
         {
             get { return _operand1; }
@@ -673,6 +798,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Second operand
+        /// </summary>
         public string Operand2
         {
             get { return _operand2; }
@@ -683,22 +811,15 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Operator
+        /// </summary>
         public string Operator
         {
             get { return _operator; }
             set
             {
                 _operator = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Result
-        {
-            get { return _result; }
-            set
-            {
-                _result = value;
                 OnPropertyChanged();
             }
         }
@@ -714,12 +835,18 @@ namespace calculator.ViewModels
 
         #endregion Constructor
 
-        #region Public Methods
+        #region Private Methods
 
-        public void CheckClearCurrentDisplay(bool isDot)
+        /// <summary>
+        /// Check whether we need to clear current display
+        /// </summary>
+        /// <param name="isDot"></param>
+        private void CheckClearCurrentDisplay(bool isDot)
         {
+            // If user recently selected an operator (ex. +,-,/,*)
             if (JustSelectedOperator)
             {
+                // Reset to 0 if dot requested to clear
                 if (isDot)
                 {
                     CurrentDisplay = "0";
@@ -731,12 +858,13 @@ namespace calculator.ViewModels
                 
                 JustSelectedOperator = false;
             }
-        }
+        }        
 
-        #endregion Public Methods
-
-        #region Private Methods
-
+        /// <summary>
+        /// Safely translate string to float
+        /// </summary>
+        /// <param name="numbers"></param>
+        /// <returns></returns>
         private float getFloat(string numbers)
         {
             float floatNumber;
@@ -748,6 +876,11 @@ namespace calculator.ViewModels
             return floatNumber;
         }
 
+        /// <summary>
+        /// Log history
+        /// </summary>
+        /// <param name="historyAction"></param>
+        /// <param name="value"></param>
         private void logHistory(
             string historyAction,
             string value)
@@ -759,6 +892,9 @@ namespace calculator.ViewModels
                     value));
         }
 
+        /// <summary>
+        /// Simulate backspace on CurrentDisplay
+        /// </summary>
         private void onBack()
         {
             if (CurrentDisplay.Length == 1)
@@ -771,14 +907,20 @@ namespace calculator.ViewModels
             }            
         }
 
+        /// <summary>
+        /// Clear
+        /// </summary>
+        /// <param name="clearEntry"></param>
         private void onClear(bool clearEntry)
         {
             CurrentDisplay = "0";
             logHistory(HistoryActions.Clear, CurrentDisplay);
 
+            // If clear entry executed this
             if (!clearEntry ||
                 !string.IsNullOrEmpty(EqualsSign))
             { 
+                // Clear all display
                 EqualsSign = string.Empty;
                 Operand1 = string.Empty;
                 Operand2 = string.Empty;
@@ -787,6 +929,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Equals is pressed
+        /// </summary>
         private void onEquals()
         {           
             switch (Operator)
@@ -855,6 +1000,9 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Export history to text file
+        /// </summary>
         private void onExport()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -867,29 +1015,37 @@ namespace calculator.ViewModels
                 }
 
                 // Create a file to write to.
-                using (StreamWriter sw = File.CreateText(saveFileDialog.FileName))
+                using (StreamWriter streamWriter = File.CreateText(saveFileDialog.FileName))
                 {
+                    // Write each history into text file
                     foreach (HistoryEntry historyEntry in _history)
                     {
-                        sw.WriteLine(historyEntry.ID + "," + historyEntry.Action + "," + historyEntry.Value);
+                        streamWriter.WriteLine(historyEntry.Id + "," + historyEntry.Action + "," + historyEntry.Value);
                     }
                 }                
             }
         }
 
+        /// <summary>
+        /// Import history form text file
+        /// </summary>
         private void onImport()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text file (*.txt)|*.txt";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                using (StreamReader sr = File.OpenText(openFileDialog.FileName))
+                using (StreamReader streamReader = File.OpenText(openFileDialog.FileName))
                 {
-                    string s = string.Empty;
+                    string stringLine = string.Empty;
                     _history.Clear();
-                    while ((s = sr.ReadLine()) != null)
+
+                    // Fill up _history with history from text file)
+                    while ((stringLine = streamReader.ReadLine()) != null)
                     {
-                        string[] stringArray = s.Split(',');
+                        string[] stringArray = stringLine.Split(',');
+
+                        // Check whether file is properly formatted
                         if (stringArray.Count() == 3)
                         {
                             _history.Add(
@@ -904,17 +1060,24 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Operate where two operands are required
+        /// </summary>
+        /// <param name="operation"></param>
         private void onOperate(
             string operation)
         {
             JustSelectedOperator = true;
             
+            // If there are no operands yet
             if (string.IsNullOrWhiteSpace(Operand1) ||
                 !string.IsNullOrWhiteSpace(EqualsSign))
             {
                 Operand1 = CurrentDisplay;
                 Operand2 = string.Empty;
                 EqualsSign = string.Empty;
+
+                // Log action depending on operation
                 switch (operation)
                 {
                     case Operations.Add:
@@ -1006,8 +1169,13 @@ namespace calculator.ViewModels
             Operator = operation;
         }
 
+        /// <summary>
+        /// Operate where only one operand is required
+        /// </summary>
+        /// <param name="operation"></param>
         private void onSimpleOperate(string operation)
         {
+            // Execute operation
             switch (operation)
             {
                 case Operations.Negate:
@@ -1034,8 +1202,13 @@ namespace calculator.ViewModels
             }
         }
 
+        /// <summary>
+        /// Manipulate memory
+        /// </summary>
+        /// <param name="memoryActions"></param>
         private void onMemoryCommand(string memoryActions)
         {
+            // Manipulate memory depending on memoryActions
             switch (memoryActions)
             {
                 case MemoryActions.MemoryClear:
